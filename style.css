@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.foto-item {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 250px;
+}
+
+.foto-item img {
+    width: 200px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+#check-btn {
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.correcto {
+    color: green;
+}
+
+.incorrecto {
+    color: red;
+}
