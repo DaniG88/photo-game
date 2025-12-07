@@ -8,7 +8,8 @@ const fotos = [
     { archivo: "img/foto6.jpg", correcta: "Rosa", seleccion: null },
     { archivo: "img/foto7.jpg", correcta: "Edu", seleccion: null },
     { archivo: "img/foto8.jpg", correcta: "Karen", seleccion: null },
-    { archivo: "img/foto9.jpg", correcta: "Dani", seleccion: null }
+    { archivo: "img/foto9.jpg", correcta: "Dani", seleccion: null },
+	{ archivo: "img/foto10.jpg", correcta: "Maju", seleccion: null }
 ];
 
 // OPCIONES DISPONIBLES
