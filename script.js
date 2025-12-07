@@ -7,7 +7,7 @@ const fotos = [
 ];
 
 // OPCIONES DISPONIBLES
-const opciones = ["David", "Laia", "Edgar", "Belen", "Arnau", "Dani", "Vero", "Dalmau", "Maju"];
+const opciones = ["David", "Laia", "Edgar", "Belen", "Arnau", "Dani", "Vero", "Dalmau", "Maju", "Rosa", "Edu", "Karen"];
 
 const container = document.getElementById("game-container");
 
@@ -16,6 +16,19 @@ let nombresAcertados = new Set();
 
 // Mantiene referencia del selector activo
 let selectorActivo = null;
+
+// Mezcla aleatoria estilo Fisher–Yates
+function shuffle(array) {
+    let m = array.length, i, t;
+    while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+    }
+    return array;
+}
+
 
 
 // === GENERAR TODAS LAS FOTOS ===
@@ -42,7 +55,7 @@ fotos.forEach((foto, idx) => {
     const closeBtn = document.getElementById(`close-${idx}`);
 
     // === CREAR BOCADILLOS ===
-    opciones.forEach(nombre => {
+    shuffle([...opciones]).forEach(nombre => {
         const chip = document.createElement("div");
         chip.className = "bocadillo";
         chip.textContent = nombre;
