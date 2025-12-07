@@ -189,3 +189,82 @@ h1::after {
     border-radius: 2px;
 }
 
+/* CONTENEDOR DE BOCADILLOS */
+.selector-bocadillos {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+
+    padding: 40px;         /* antes 20px */
+    gap: 26px;             /* separaciones MUCHO más grandes */
+
+    background: rgba(0,0,0,0.30); /* se sigue viendo la foto */
+    border-radius: 12px;
+    z-index: 20;
+}
+
+
+/* CADA BOCADILLO */
+.bocadillo {
+    padding: 24px 36px;      /* MUCHÍSIMO más grande */
+    background: rgba(255,255,255,0.92);
+    border-radius: 40px;     /* Más redondeado */
+
+    font-size: 30px;         /* Antes era 22px → ahora XL */
+    font-weight: 900;
+    color: #333;
+
+    box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+
+    cursor: pointer;
+    transition: transform .1s ease, background .1s ease, box-shadow .1s ease;
+}
+
+.bocadillo:active {
+    transform: scale(0.92);
+    background: rgba(255,255,255,1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+}
+
+
+.bocadillo:active {
+    transform: scale(0.92);
+    background: rgba(255,255,255,1);
+}
+
+.bocadillo.disabled {
+    opacity: 0.35;
+    pointer-events: none;
+    background: rgba(255,255,255,0.5);
+    box-shadow: none;
+}
+
+
+.selector-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+
+    background: rgba(0,0,0,0.45);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    z-index: 30;
+}

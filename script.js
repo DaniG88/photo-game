@@ -1,26 +1,29 @@
 // FOTOS + RESPUESTA CORRECTA
 const fotos = [
-    { archivo: "img/foto1.jpg", correcta: "Dani", seleccion: null },
-    { archivo: "img/foto2.jpg", correcta: "Vero", seleccion: null },
-	{ archivo: "img/foto3.jpg", correcta: "Juan", seleccion: null },
-	{ archivo: "img/foto4.jpg", correcta: "Ana", seleccion: null },
+    { archivo: "img/foto1.jpg", correcta: "Dalmau", seleccion: null },
+    { archivo: "img/foto2.jpg", correcta: "David", seleccion: null },
+    { archivo: "img/foto3.jpg", correcta: "Dani", seleccion: null },
+    { archivo: "img/foto4.jpg", correcta: "Belen", seleccion: null },
 ];
 
 // OPCIONES DISPONIBLES
-const opciones = ["Dani", "Vero", "Juan", "Ana"];
+const opciones = ["David", "Laia", "Edgar", "Belen", "Arnau","Dani", "Vero", "Dalmau", "Maju"];
 
 const container = document.getElementById("game-container");
 
+// Mantiene referencia del selector activo
+let selectorActivo = null;
 
-// === GENERAR FOTOS ===
+
+// === GENERAR TODAS LAS FOTOS ===
 fotos.forEach((foto, idx) => {
 
     const div = document.createElement("div");
     div.className = "foto-item";
 
     div.innerHTML = `
-        <div class="menu-sobre-foto" id="menu-${idx}">
-            <div class="menu-close" id="close-${idx}">✕</div>
+        <div class="selector-bocadillos" id="selector-${idx}">
+            <div class="selector-close" id="close-${idx}">✕</div>
         </div>
 
         <img class="foto-img" src="${foto.archivo}" id="img-${idx}">
@@ -30,71 +33,98 @@ fotos.forEach((foto, idx) => {
 
     container.appendChild(div);
 
-    const menu = document.getElementById(`menu-${idx}`);
+    const selector = document.getElementById(`selector-${idx}`);
     const img = document.getElementById(`img-${idx}`);
+    const nombreDiv = document.getElementById(`nombre-${idx}`);
     const closeBtn = document.getElementById(`close-${idx}`);
 
-    // Crear opciones dentro del menú
+    // === CREAR BOCADILLOS DE OPCIONES ===
     opciones.forEach(nombre => {
-		const op = document.createElement("div");
-		op.className = "menu-opcion";
-		op.textContent = nombre;
+        const chip = document.createElement("div");
+        chip.className = "bocadillo";
+        chip.textContent = nombre;
 
-		op.addEventListener("click", () => {
+        chip.addEventListener("click", () => {
 
-			// 1) Si seleccionó el MISMO nombre → solo cerrar
-			if (foto.seleccion === nombre) {
-				menu.style.display = "none";
-				img.classList.remove("foto-blur");
-				return;
-			}
+            // Misma opción → solo cerrar
+            if (foto.seleccion === nombre) {
+                cerrarSelector(selector, img);
+                return;
+            }
 
-			// 2) Selección nueva → actualizar
-			foto.seleccion = nombre;
+            // Nueva selección
+            foto.seleccion = nombre;
 
-			// MOSTRAR NOMBRE (antes oculto)
-			const nombreDiv = document.getElementById(`nombre-${idx}`);
-			nombreDiv.textContent = nombre;
-			nombreDiv.classList.add("show");
+            nombreDiv.textContent = nombre;
+            nombreDiv.classList.add("show");
 
+            const overlay = document.getElementById(`overlay-${idx}`);
+            overlay.className = "overlay";
+            overlay.textContent = "";
 
-			// Resetear overlay de ESTA foto
-			const overlay = document.getElementById(`overlay-${idx}`);
-			overlay.className = "overlay";
-			overlay.textContent = "";
+            cerrarSelector(selector, img);
+        });
 
-			// Cerrar menú
-			menu.style.display = "none";
-			img.classList.remove("foto-blur");
-		});
-
-		menu.appendChild(op);
-	});
-
-
-    // Abrir menú al tocar la foto
-    img.addEventListener("click", () => {
-        const visible = menu.style.display === "flex";
-        menu.style.display = visible ? "none" : "flex";
-        img.classList.toggle("foto-blur", !visible);
+        selector.appendChild(chip);
     });
 
-    // Cerrar menú con la X
+    // === ABRIR SELECTOR AL CLICAR LA FOTO ===
+    img.addEventListener("click", () => {
+
+        // Si otro selector estaba abierto → cerrarlo
+        if (selectorActivo && selectorActivo !== selector) {
+            cerrarSelector(selectorActivo.selector, selectorActivo.img);
+        }
+
+        const visible = selector.style.display === "flex";
+        selector.style.display = visible ? "none" : "flex";
+        img.classList.toggle("foto-blur", !visible);
+
+        // Guardar nuevo activo
+        selectorActivo = visible ? null : { selector, img };
+
+        // Desactivar bocadillo seleccionado
+        const seleccionActual = foto.seleccion;
+        [...selector.children].forEach(elem => {
+            if (!elem.classList.contains("bocadillo")) return;
+
+            if (elem.textContent === seleccionActual) {
+                elem.classList.add("disabled");
+            } else {
+                elem.classList.remove("disabled");
+            }
+        });
+    });
+
+    // === X PARA CERRAR ===
     closeBtn.addEventListener("click", () => {
-        menu.style.display = "none";
-        img.classList.remove("foto-blur");
+        cerrarSelector(selector, img);
+    });
+
+    // === CERRAR SI SE TOCA FUERA DEL SELECTOR ===
+    selector.addEventListener("click", (e) => {
+        if (e.target === selector) {
+            cerrarSelector(selector, img);
+        }
     });
 });
+
+
+// === FUNCIÓN PARA CERRAR SELECTOR ===
+function cerrarSelector(selector, img) {
+    selector.style.display = "none";
+    img.classList.remove("foto-blur");
+    selectorActivo = null;
+}
 
 
 // === CHECK ===
 document.getElementById("check-btn").addEventListener("click", () => {
 
-    // Cerrar todos los menús abiertos
-    fotos.forEach((_, idx) => {
-        document.getElementById(`menu-${idx}`).style.display = "none";
-        document.getElementById(`img-${idx}`).classList.remove("foto-blur");
-    });
+    // Cerrar cualquier selector abierto
+    if (selectorActivo) {
+        cerrarSelector(selectorActivo.selector, selectorActivo.img);
+    }
 
     // Evaluar respuestas
     fotos.forEach((foto, idx) => {
